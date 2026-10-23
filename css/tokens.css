@@ -1,0 +1,141 @@
+/* haze — generado de tokens.json (design system "haze"). No editar a mano. */
+@font-face { font-family: "Newsreader"; src: url("../fonts/Newsreader-opsz.woff2") format("woff2"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("../fonts/Newsreader-opsz-italic.woff2") format("woff2"); font-weight: 200 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Hanken Grotesk"; src: url("../fonts/HankenGrotesk-wght.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+:root, [data-theme="dia"] {
+  --surface-100: #F3EDE2;
+  --surface-200: #FBF8F1;
+  --surface-300: #E9E0D0;
+  --ink: #1F1815;
+  --ink-soft: #5B4F46;
+  --ink-faint: #857769;
+  --line: #D8CDBA;
+  --line-strong: #8C7E6E;
+  --bordo: #55202D;
+  --on-bordo: #F6EEE2;
+  --action: var(--bordo);
+  --on-action: #F6EEE2;
+  --brasa: #9B4A1C;
+  --ember: #E0915A;
+  --laton: #9A7842;
+  --oliva: #4E5B35;
+  --alerta: #A3281F;
+  --aviso: #7A4E00;
+  --logo-ink: var(--bordo);
+  --scrim: #1F181599;
+  --shadow-lift: 0 12px 28px -14px rgba(31,24,21,0.35), 0 2px 6px rgba(31,24,21,0.08);
+  --shadow-sheet: 0 -18px 40px -16px rgba(31,24,21,0.38);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-sheet: 24px;
+  --radius-pill: 999px;
+  --z-dock: 30;
+  --z-sheet: 40;
+  --z-screen: 45;
+  --z-toast: 60;
+  --z-splash: 80;
+  --font-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+/* La página sigue el tema del dispositivo: claro = día, oscuro = noche.
+   Las pantallas que fijan su franja (data-theme="dia"/"noche") mandan sobre esto. */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --surface-100: #181310;
+  --surface-200: #221B17;
+  --surface-300: #100C0A;
+  --ink: #F2EADD;
+  --ink-soft: #B8AA99;
+  --ink-faint: #8C7F70;
+  --line: #382E27;
+  --line-strong: #7A6C5E;
+  --bordo: #6A2A3A;
+  --on-bordo: #F6EEE2;
+  --action: var(--ember);
+  --on-action: #1F1815;
+  --brasa: #E8996A;
+  --ember: #E0915A;
+  --laton: #C2A06A;
+  --oliva: #A5B57F;
+  --alerta: #F08A7E;
+  --aviso: #E9B85C;
+  --logo-ink: #F3EDE2;
+  --scrim: #000000A6;
+  --shadow-lift: 0 12px 28px -12px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.4);
+  --shadow-sheet: 0 -18px 40px -16px rgba(0,0,0,0.75);
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --surface-100: #181310;
+  --surface-200: #221B17;
+  --surface-300: #100C0A;
+  --ink: #F2EADD;
+  --ink-soft: #B8AA99;
+  --ink-faint: #8C7F70;
+  --line: #382E27;
+  --line-strong: #7A6C5E;
+  --bordo: #6A2A3A;
+  --on-bordo: #F6EEE2;
+  --action: var(--ember);
+  --on-action: #1F1815;
+  --brasa: #E8996A;
+  --ember: #E0915A;
+  --laton: #C2A06A;
+  --oliva: #A5B57F;
+  --alerta: #F08A7E;
+  --aviso: #E9B85C;
+  --logo-ink: #F3EDE2;
+  --scrim: #000000A6;
+  --shadow-lift: 0 12px 28px -12px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.4);
+  --shadow-sheet: 0 -18px 40px -16px rgba(0,0,0,0.75);
+  color-scheme: dark;
+}
+[data-theme="noche"] {
+  --surface-100: #181310;
+  --surface-200: #221B17;
+  --surface-300: #100C0A;
+  --ink: #F2EADD;
+  --ink-soft: #B8AA99;
+  --ink-faint: #8C7F70;
+  --line: #382E27;
+  --line-strong: #7A6C5E;
+  --bordo: #6A2A3A;
+  --on-bordo: #F6EEE2;
+  --action: var(--ember);
+  --on-action: #1F1815;
+  --brasa: #E8996A;
+  --ember: #E0915A;
+  --laton: #C2A06A;
+  --oliva: #A5B57F;
+  --alerta: #F08A7E;
+  --aviso: #E9B85C;
+  --logo-ink: #F3EDE2;
+  --scrim: #000000A6;
+  --shadow-lift: 0 12px 28px -12px rgba(0,0,0,0.7), 0 2px 6px rgba(0,0,0,0.4);
+  --shadow-sheet: 0 -18px 40px -16px rgba(0,0,0,0.75);
+}
+.display-xl { font-family: var(--font-display); font-size: 38px; line-height: 40px; font-weight: 380; letter-spacing: -0.01em; }
+.display-lg { font-family: var(--font-display); font-size: 28px; line-height: 32px; font-weight: 400; letter-spacing: -0.005em; }
+.display-md { font-family: var(--font-display); font-size: 22px; line-height: 28px; font-weight: 420; }
+.dish-name { font-family: var(--font-display); font-size: 21px; line-height: 25px; font-weight: 450; }
+.dish-name-sm { font-family: var(--font-display); font-size: 17px; line-height: 21px; font-weight: 480; }
+.story { font-family: var(--font-display); font-size: 17px; line-height: 26px; font-weight: 380; font-style: italic; }
+.body { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 400; }
+.body-sm { font-family: var(--font-sans); font-size: 14px; line-height: 21px; font-weight: 400; }
+.caption { font-family: var(--font-sans); font-size: 12.5px; line-height: 18px; font-weight: 450; }
+.label-caps { font-family: var(--font-sans); font-size: 11px; line-height: 14px; font-weight: 650; letter-spacing: 0.14em; }
+.price { font-family: var(--font-sans); font-size: 16px; line-height: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.price-lg { font-family: var(--font-sans); font-size: 22px; line-height: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.button { font-family: var(--font-sans); font-size: 15px; line-height: 20px; font-weight: 650; letter-spacing: 0.01em; }
+@media (prefers-reduced-motion: reduce) { :root { --dur-1: 0ms; --dur-2: 0ms; --dur-3: 0ms; } }

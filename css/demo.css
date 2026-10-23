@@ -1,0 +1,316 @@
+/* haze · demo para presentar en el local.
+   Concepto: una consola de presentación. Arriba, la marca y las estaciones
+   del recorrido (cliente, cocina, mozo, dueño); abajo, el escenario donde se
+   monta cada pantalla real de la librería. Todo sale de tokens.css. */
+
+html { background: var(--surface-100); }
+body {
+  margin: 0; min-height: 100vh; background: var(--surface-100); color: var(--ink);
+  font-family: var(--font-sans); -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 50; background: var(--surface-100);
+}
+.dm-noscript { padding: 40px 20px; text-align: center; }
+.dm { min-height: 100vh; display: flex; flex-direction: column; }
+.dm .label-caps { text-transform: uppercase; }
+.dm :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 4px; }
+
+/* ── Barra de arriba ── */
+.dm-top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 40;
+  display: flex; align-items: center; gap: var(--space-6);
+  padding-block: var(--space-3);
+  padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+  background: var(--surface-100); border-bottom: 1px solid var(--line);
+}
+.dm-marca { display: flex; align-items: center; gap: var(--space-3); flex: none; text-decoration: none; color: inherit; }
+.dm-marca__sep { width: 1px; height: 24px; background: var(--line); }
+.dm-marca .label-caps { color: var(--ink-soft); }
+.dm-nav { display: flex; gap: var(--space-1); overflow-x: auto; scrollbar-width: none; min-width: 0; flex: 1; }
+.dm-nav::-webkit-scrollbar { display: none; }
+.dm-nav__b {
+  flex: none; display: inline-flex; align-items: center; gap: var(--space-2);
+  min-height: 40px; padding: 0 var(--space-4); border: 1px solid transparent; border-radius: var(--radius-pill);
+  background: none; color: var(--ink-soft); font: 600 14px/1 var(--font-sans); cursor: pointer;
+  transition: color var(--dur-1) var(--ease-haze), background var(--dur-1) var(--ease-haze);
+}
+.dm-nav__b:hover { color: var(--ink); }
+.dm-nav__b[aria-current="page"] { background: var(--action); color: var(--on-action); }
+.dm-nav__n { font-variant-numeric: tabular-nums; opacity: .7; font-weight: 500; }
+.dm-tema {
+  flex: none; display: inline-flex; padding: 3px; gap: 2px; border: 1px solid var(--line-strong); border-radius: var(--radius-pill);
+}
+.dm-tema button {
+  min-height: 32px; padding: 0 var(--space-3); border: 0; border-radius: var(--radius-pill); background: none;
+  color: var(--ink-soft); font: 600 13px/1 var(--font-sans); cursor: pointer;
+}
+.dm-tema button[aria-pressed="true"] { background: var(--ink); color: var(--surface-100); }
+.dm-top__carta {
+  flex: none; display: inline-flex; align-items: center; min-height: 38px; padding: 0 var(--space-4);
+  border: 1px solid var(--action); border-radius: var(--radius-pill); background: none;
+  color: var(--action); font: 650 13px/1 var(--font-sans); cursor: pointer;
+}
+.dm-top__carta:hover { background: var(--action); color: var(--on-action); }
+
+/* ── Escenario ── */
+.dm-stage {
+  flex: 1; display: flex; flex-direction: column; gap: var(--space-6);
+  padding-block: var(--space-8) var(--space-12);
+  padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+  width: 100%; max-width: 1280px; margin: 0 auto; box-sizing: border-box;
+}
+.dm-head { display: grid; gap: var(--space-2); max-width: 46rem; }
+.dm-head h1 { margin: 0; text-wrap: balance; }
+.dm-head h1::before { content: "/ "; color: var(--brasa); }
+.dm-head p { margin: 0; color: var(--ink-soft); }
+.dm-head .label-caps { color: var(--brasa); }
+.dm-lienzo { min-width: 0; overflow-x: auto; }
+.dm-lienzo--centro { display: flex; justify-content: center; }
+.dm-marco { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; min-width: 0; }
+.dm-sig {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3);
+  padding-top: var(--space-6); border-top: 1px solid var(--line);
+}
+.dm-sig p { margin: 0; color: var(--ink-soft); }
+.dm-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: 48px; padding: 0 var(--space-6); border-radius: var(--radius-sm); border: 1px solid var(--line-strong);
+  background: none; color: var(--ink); font: 650 15px/20px var(--font-sans); letter-spacing: .01em; cursor: pointer; text-decoration: none;
+}
+.dm-btn--prim { background: var(--action); border-color: var(--action); color: var(--on-action); }
+
+/* Sub-pestañas del panel del dueño */
+.dm-sub { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.dm-sub button {
+  min-height: 40px; padding: 0 var(--space-4); border: 1px solid var(--line-strong); border-radius: var(--radius-pill);
+  background: none; color: var(--ink); font: 600 14px/1 var(--font-sans); cursor: pointer;
+}
+.dm-sub button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--surface-100); }
+
+.dm-completa { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-5); }
+.dm-completa p { margin: 0; color: var(--ink-soft); max-width: 34rem; }
+.dm-evento { display: grid; gap: 12px; justify-items: center; min-width: 0; max-width: 100%; }
+.dm-evento > :first-child { max-width: 100%; overflow-x: auto; }
+
+/* ── Carta a pantalla completa ──
+   Tapa toda la consola. En el celular la carta llega a los bordes; en una
+   pantalla grande queda una columna del ancho de un teléfono, a toda altura. */
+html.dm-quieto, html.dm-quieto body { overflow: hidden; }
+.dm-full {
+  position: fixed; inset: 0; z-index: 100; display: flex; justify-content: center;
+  background: var(--surface-100); box-sizing: border-box;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}
+.dm-full .hz-stage { display: flex; flex: 1; max-width: 480px; padding: 0; min-width: 0; min-height: 0; }
+/* Lugar para la ✕ en la fila del logo, idiomas y mesa. */
+.dm-full .hz-top { padding-right: 58px; }
+.dm-full .hz-phone { width: 100% !important; height: 100% !important; min-height: 0 !important; border: 0; border-radius: 0; box-shadow: none; }
+.dm-full__salir {
+  position: fixed; z-index: 101;
+  top: calc(env(safe-area-inset-top, 0px) + 21px); right: calc(env(safe-area-inset-right, 0px) + 12px);
+  width: 36px; height: 36px; display: grid; place-items: center; padding: 0;
+  border: 1px solid var(--line-strong); border-radius: 50%;
+  background: color-mix(in srgb, var(--surface-100) 82%, transparent); color: var(--ink);
+  font: 600 15px/1 var(--font-sans); cursor: pointer;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+/* Con una hoja abierta (plato, pedido) manda la ✕ de la hoja: la nuestra se corre. */
+.dm-full:has(.hz-sheetwrap.is-open) .dm-full__salir { opacity: 0; pointer-events: none; }
+.dm-full__salir { transition: opacity var(--dur-1) var(--ease-haze); }
+@media (min-width: 600px) {
+  .dm-full .hz-phone { border-inline: 1px solid var(--line); }
+  .dm-full__salir { right: calc(50% - 240px + 12px); }
+}
+
+/* Barra del pulgar: solo en el celular. */
+.dm-pulgar { display: none; }
+
+/* ── Presentación ── */
+.dm-hero {
+  position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: var(--space-8); align-items: center; padding: var(--space-12) var(--space-10);
+  background: var(--bordo); color: var(--on-bordo); border-radius: var(--radius-lg);
+  --logo-ink: var(--on-bordo); --brasa: var(--ember);
+}
+.dm-hero__barras {
+  position: absolute; inset: 0 0 0 auto; width: 44%; pointer-events: none; opacity: .14;
+  background: repeating-linear-gradient(112deg, transparent 0 34px, var(--on-bordo) 34px 46px);
+}
+.dm-hero__txt { position: relative; display: grid; gap: var(--space-5); justify-items: start; }
+.dm-hero__txt h1 { margin: 0; text-wrap: balance; }
+.dm-hero__txt p { margin: 0; max-width: 34rem; }
+.dm-hero .label-caps { color: var(--ember); }
+.dm-hero .dm-btn { color: var(--on-bordo); border-color: color-mix(in srgb, var(--on-bordo) 55%, transparent); }
+.dm-hero .dm-btn.dm-btn--prim { background: var(--on-bordo); border-color: var(--on-bordo); color: var(--bordo); }
+.dm-hero__acc { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.dm-hero__platos { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); justify-items: center; }
+.dm-hero__platos .hz-plate { --surface-300: color-mix(in srgb, var(--on-bordo) 12%, var(--bordo)); }
+
+.dm-pasos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); margin: 0; padding: 0; list-style: none; }
+.dm-paso { display: grid; gap: var(--space-2); align-content: start; padding-top: var(--space-4); border-top: 1px solid var(--laton); }
+.dm-paso__n { font-style: italic; color: var(--brasa); }
+.dm-paso p { margin: 0; color: var(--ink-soft); }
+
+.dm-roles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+.dm-rol {
+  display: grid; gap: var(--space-2); align-content: start; text-align: left; padding: var(--space-5);
+  background: var(--surface-200); border: 1px solid var(--line); border-radius: var(--radius-md);
+  color: var(--ink); cursor: pointer; font: inherit;
+  transition: border-color var(--dur-1) var(--ease-haze), transform var(--dur-1) var(--ease-haze);
+}
+.dm-rol:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+.dm-rol p { margin: 0; color: var(--ink-soft); }
+.dm-rol__ir { margin-top: var(--space-2); color: var(--brasa); font: 650 14px/20px var(--font-sans); }
+.dm-nota { margin: 0; color: var(--ink-soft); max-width: 46rem; }
+
+/* ── Ajustes de componentes dentro del escenario ── */
+.dm .hz-stage { padding: 0; }
+@media (max-width: 1100px) {
+  .dm-hero { grid-template-columns: 1fr; padding: var(--space-10) var(--space-6); }
+  .dm-hero__platos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .dm-roles, .dm-pasos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* ── Celular: para mostrar la demo en la mano ──
+   Arriba la marca, el acceso directo a la carta y el tema; las estaciones se
+   deslizan en una fila, y abajo, al alcance del pulgar, anterior y siguiente. */
+@media (max-width: 760px) {
+  .dm-top { flex-wrap: wrap; gap: var(--space-2) var(--space-3); padding-block: var(--space-2); }
+  .dm-nav { order: 3; flex-basis: 100%; margin-inline: -4px; }
+  .dm-nav__b { min-height: 36px; padding: 0 var(--space-3); }
+  .dm-marca__sep, .dm-marca .label-caps { display: none; }
+  .dm-top__carta { margin-left: auto; }
+  .dm-tema button { padding: 0 10px; }
+  .dm-stage { gap: var(--space-5); padding-block: var(--space-5) calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .dm-head h1.display-lg { font-size: 30px; line-height: 36px; }
+  .dm-sig { display: none; }
+
+  .dm-hero { gap: var(--space-6); padding: var(--space-8) var(--space-5); }
+  .dm-hero__txt { gap: var(--space-4); }
+  .dm-hero__txt h1.display-xl { font-size: 36px; line-height: 42px; }
+  .dm-hero__acc { display: grid; width: 100%; }
+  .dm-hero__platos { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-2); }
+  .dm-hero__platos .hz-plate { --s: min(19vw, 84px) !important; }
+  .dm-pasos { grid-template-columns: 1fr; gap: var(--space-4); }
+  .dm-roles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+  .dm-rol { padding: var(--space-4); }
+
+  .dm-completa .dm-btn { width: 100%; }
+
+  .dm-pulgar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+    display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: var(--space-3);
+    padding-top: var(--space-2); padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+    padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px));
+    background: var(--surface-100); border-top: 1px solid var(--line);
+  }
+  .dm-pulgar__txt { display: grid; gap: 2px; min-width: 0; }
+  .dm-pulgar__txt b { font: 650 15px/20px var(--font-sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dm-pulgar__txt .caption { color: var(--ink-soft); }
+  .dm-pulgar__b {
+    min-height: 48px; min-width: 48px; padding: 0 var(--space-4); border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+    background: none; color: var(--ink); font: 650 15px/1 var(--font-sans); cursor: pointer;
+  }
+  .dm-pulgar__b:first-child { padding: 0; font-size: 22px; }
+  .dm-pulgar__b:disabled { opacity: .35; cursor: default; }
+  .dm-pulgar__b--sig { background: var(--action); border-color: var(--action); color: var(--on-action); }
+}
+@media (max-width: 360px) {
+  .dm-roles { grid-template-columns: 1fr; }
+  .dm-top__carta { padding: 0 var(--space-3); }
+}
+/* ── Cocina, mozo y dueño en el celular ──
+   La librería las arma para tablet o compu (760–980px de mínimo). En el
+   celular se sueltan ese mínimo y se reacomodan: las columnas de la cocina
+   se pasan deslizando, las mesas van de a dos y el panel del dueño apila. */
+/* En tablet vertical tampoco entran: se suelta el mínimo y los platos apilan. */
+@media (max-width: 1023px) {
+  .dm .hz-kitchen, .dm .hz-floor, .dm .hz-editor,
+  .dm .hz-admin, .dm .hz-qrs, .dm .hz-inbox, .dm .hz-users { min-width: 0; }
+  .dm .hz-editor { grid-template-columns: 280px minmax(0, 1fr); }
+  .dm .hz-editor__fh { flex-direction: column; align-items: stretch; }
+  .dm .hz-editor__grid { grid-template-columns: minmax(0, 1fr); }
+  /* Las siete estaciones no entran al lado de la marca: bajan a su fila. */
+  .dm-top { flex-wrap: wrap; row-gap: var(--space-2); }
+  .dm-nav { order: 3; flex-basis: 100%; }
+  .dm-top__carta { margin-left: auto; }
+}
+@media (max-width: 760px) {
+
+  /* Cocina */
+  .dm .hz-kitchen__bar { gap: 12px; padding: 14px 14px 12px; }
+  .dm .hz-kitchen__tabs { overflow-x: auto; scrollbar-width: none; margin-inline: -14px; padding-inline: 14px; }
+  .dm .hz-kitchen__tabs::-webkit-scrollbar { display: none; }
+  .dm .hz-kitchen__tabs button { flex: none; min-height: 40px; padding: 0 14px; }
+  .dm .hz-kitchen__ctl { gap: 10px 18px; }
+  .dm .hz-kitchen__cols {
+    grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 86%;
+    gap: 12px; padding: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 14px;
+  }
+  .dm .hz-kcol { scroll-snap-align: start; min-width: 0; }
+  .dm .hz-ticketk__foot { flex-wrap: wrap; }
+  .dm .hz-ticketk__foot .hz-btn { flex: 1 1 auto; }
+
+  /* Mozo */
+  .dm .hz-floor { padding: 16px 14px 20px; }
+  .dm .hz-floor__head { flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: 16px; }
+  .dm .hz-legend { gap: 6px 14px; font-size: 12px; }
+  .dm .hz-floor__body { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .dm .hz-floor__body > :last-child { order: -1; }
+  .dm .hz-tables { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .dm .hz-tbl { min-height: 128px; padding: 12px; }
+
+  /* Dueño: platos */
+  .dm .hz-editor { grid-template-columns: minmax(0, 1fr); }
+  .dm .hz-editor__list { border-right: 0; border-bottom: 1px solid var(--line); max-height: 300px; overflow-y: auto; overscroll-behavior: contain; }
+  .dm .hz-editor__lh { position: sticky; top: 0; z-index: 1; padding: 14px 14px 10px; background: var(--surface-200); }
+  .dm .hz-editor__form { padding: 16px 14px 20px; gap: 18px; }
+  .dm .hz-editor__fh { flex-direction: column; align-items: stretch; }
+  .dm .hz-editor__acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dm .hz-editor__grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .dm .hz-editor__row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .dm .hz-editor .hz-input { min-width: 0; max-width: 100%; box-sizing: border-box; }
+
+  /* Dueño: reportes, opiniones, QR y equipo */
+  .dm .hz-admin, .dm .hz-qrs, .dm .hz-inbox, .dm .hz-users { padding: 16px 14px 20px; gap: 16px; }
+  .dm .hz-admin__head { flex-direction: column; align-items: stretch; gap: 12px; }
+  .dm .hz-admin__export { flex-wrap: wrap; }
+  .dm .hz-admin__export .hz-btn { flex: 1 1 auto; }
+  .dm .hz-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .dm .hz-kpi { padding: 12px; min-width: 0; }
+  .dm .hz-charts { grid-template-columns: minmax(0, 1fr); }
+  .dm .hz-chart { padding: 14px 12px 12px; min-width: 0; }
+  .dm .hz-bars { gap: 4px; height: 160px; }
+  .dm .hz-bar span, .dm .hz-bar b { font-size: 10px; }
+  .dm .hz-qrs__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .dm .hz-qrcard { padding: 16px 10px 12px; min-width: 0; }
+  .dm .hz-qr { max-width: 100%; height: auto; }
+  .dm .hz-inbox__top { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 14px; }
+  .dm .hz-inbox__list li { gap: 12px; }
+  .dm .hz-kpi .display-lg { font-size: 26px; line-height: 32px; }
+  .dm .hz-inbox .hz-filters { padding-inline: 0; }
+
+  /* Equipo: la tabla de permisos pasa a una tarjeta por persona, con sus
+     ocho permisos en dos filas de cuatro. */
+  .dm .hz-users__wrap { overflow: visible; }
+  .dm .hz-users table, .dm .hz-users tbody { display: block; }
+  .dm .hz-users thead { display: none; }
+  .dm .hz-users tbody tr { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 6px; padding: 14px 12px; border-bottom: 1px solid var(--line); }
+  .dm .hz-users tbody tr:last-child { border-bottom: 0; }
+  .dm .hz-users tbody th[scope="row"] { grid-column: 1 / -1; padding: 0 0 2px; border: 0; }
+  .dm .hz-users tbody td { display: grid; justify-items: center; gap: 6px; padding: 0; border: 0; }
+  .dm .hz-users tbody td::before { font-size: 11px; line-height: 14px; font-weight: 600; color: var(--ink-soft); }
+  .dm .hz-users tbody td:nth-of-type(1)::before { content: "Carta"; }
+  .dm .hz-users tbody td:nth-of-type(2)::before { content: "Reportes"; }
+  .dm .hz-users tbody td:nth-of-type(3)::before { content: "Usuarios"; }
+  .dm .hz-users tbody td:nth-of-type(4)::before { content: "Salón"; }
+  .dm .hz-users tbody td:nth-of-type(5)::before { content: "Cocina"; }
+  .dm .hz-users tbody td:nth-of-type(6)::before { content: "Parrilla"; }
+  .dm .hz-users tbody td:nth-of-type(7)::before { content: "Postres"; }
+  .dm .hz-users tbody td:nth-of-type(8)::before { content: "Barra"; }
+}
+/* En el teléfono la carta de la estación ocupa el ancho, sin el marco de celular. */
+@media (max-width: 440px) {
+  .dm .dm-stage .hz-phone { width: 100% !important; height: calc(100dvh - 210px) !important; min-height: 560px; border-radius: var(--radius-lg); }
+}
